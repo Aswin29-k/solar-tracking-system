@@ -1,0 +1,46 @@
+#include <Servo.h>
+
+// Define servos for horizontal and vertical movement
+Servo horizontalServo;
+Servo verticalServo;
+
+// LDR pin connections
+int LDR_TopLeft = A0;
+int LDR_TopRight = A1;
+int LDR_BottomLeft = A2;
+int LDR_BottomRight = A3;
+
+// Initial positions of servos
+int horizontalPos = 90;
+int verticalPos = 90;
+
+void setup() {
+    horizontalServo.attach(9); // Connect horizontal servo to pin 9
+    verticalServo.attach(10);  // Connect vertical servo to pin 10
+
+    pinMode(LDR_TopLeft, INPUT);
+    pinMode(LDR_TopRight, INPUT);
+    pinMode(LDR_BottomLeft, INPUT);
+    pinMode(LDR_BottomRight, INPUT);
+}
+
+void loop() {
+    // Read LDR values
+    int TL = analogRead(LDR_TopLeft);
+    int TR = analogRead(LDR_TopRight);
+    int BL = analogRead(LDR_BottomLeft);
+    int BR = analogRead(LDR_BottomRight);
+
+    // Calculate average values
+    int topAverage = (TL + TR) / 2;
+    int bottomAverage = (BL + BR) / 2;
+    int leftAverage = (TL + BL) / 2;
+    int rightAverage = (TR + BR) / 2;
+
+    // Tolerance to prevent unnecessary movements
+    int tolerance = 10;
+
+    // Vertical Movement (Up & Down)
+    if (topAverage > bottomAverage + tolerance) {
+        verticalPos += 1;
+    } else if (bottomAverage >
